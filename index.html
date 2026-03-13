@@ -1,0 +1,1058 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ane Yulviane Timesheet</title>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<style>
+  :root {
+    --bg:#f6f3ef; --card:#fff; --text:#2f2a24; --muted:#6f655c;
+    --border:#ddd4ca; --head:#f0ebe4; --accent:#eef5f0; --accent-text:#4d6d5d; --danger:#a14b4b;
+    --ok:#2d6a4f; --btn:#dfeade;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:Arial, Helvetica, sans-serif; background:var(--bg); color:var(--text); }
+  .wrap { max-width:100%; padding:10px 6px 24px; }
+  h1 { margin:0 0 6px; text-align:center; font-size:1.28rem; }
+  .sub { margin:0 0 8px; text-align:center; color:var(--muted); font-size:.78rem; }
+  .meta { display:flex; gap:6px; justify-content:center; flex-wrap:wrap; margin-bottom:10px; }
+  .pill { border:1px solid var(--border); background:#fff; border-radius:999px; padding:6px 10px; font-size:.72rem; color:var(--muted); }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:14px; overflow:hidden; box-shadow:0 6px 18px rgba(0,0,0,.05); }
+  table { width:100%; border-collapse:collapse; table-layout:fixed; }
+  th, td { border-bottom:1px solid var(--border); text-align:center; padding:6px 3px; font-size:.74rem; }
+  th { background:var(--head); font-size:.67rem; }
+  tr:last-child td { border-bottom:none; }
+  .day { font-weight:700; }
+  select, input {
+    width:100%; min-width:0; padding:7px 2px; border:1px solid #cfc5bb; border-radius:8px;
+    background:#fff; font-size:.72rem; text-align:center;
+  }
+  button { border:none; border-radius:8px; cursor:pointer; }
+  .row-reset { width:100%; padding:7px 0; background:#ece6de; font-size:.82rem; font-weight:700; }
+  .footer { padding:10px 8px 12px; border-top:1px solid var(--border); background:#fcfbf9; }
+  .totals { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin-bottom:8px; }
+  .box { background:var(--accent); border:1px solid #d8e4db; border-radius:10px; padding:8px 6px; text-align:center; }
+  .label { color:var(--muted); font-size:.68rem; }
+  .value { font-size:1rem; font-weight:700; color:var(--accent-text); }
+  .actions { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
+  .calc-btn { background:var(--btn); color:#2f2a24; padding:10px 12px; font-size:.9rem; }
+  .email-btn { background:var(--ok); color:#fff; padding:10px 12px; font-size:.9rem; }
+  .week-reset { background:var(--danger); color:#fff; padding:10px 12px; font-size:.9rem; }
+  .note { margin-top:10px; text-align:center; color:var(--muted); font-size:.72rem; line-height:1.3; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Ane Yulviane Timesheet</h1>
+  <p class="sub">Sat to Fri · 7am to 6pm · 15 minute intervals</p>
+  <div class="meta">
+    <div class="pill">Emails PDF to info@camelotcottages.com.au</div>
+    <div class="pill" id="status-pill">Status: ready</div>
+  </div>
+
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:10%">Day</th>
+          <th style="width:20%">Start</th>
+          <th style="width:20%">Finish</th>
+          <th style="width:12%">Hrs</th>
+          <th style="width:14%">Small</th>
+          <th style="width:14%">Big</th>
+          <th style="width:10%">Rst</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+      <tr>
+        <td class="day">Sat</td>
+        <td><select id="start-0" class="time-select"><option value="">--</option>
+<option value="07:00">7:00am</option>
+<option value="07:15">7:15am</option>
+<option value="07:30">7:30am</option>
+<option value="07:45">7:45am</option>
+<option value="08:00">8:00am</option>
+<option value="08:15">8:15am</option>
+<option value="08:30">8:30am</option>
+<option value="08:45">8:45am</option>
+<option value="09:00">9:00am</option>
+<option value="09:15">9:15am</option>
+<option value="09:30">9:30am</option>
+<option value="09:45">9:45am</option>
+<option value="10:00">10:00am</option>
+<option value="10:15">10:15am</option>
+<option value="10:30">10:30am</option>
+<option value="10:45">10:45am</option>
+<option value="11:00">11:00am</option>
+<option value="11:15">11:15am</option>
+<option value="11:30">11:30am</option>
+<option value="11:45">11:45am</option>
+<option value="12:00">12:00pm</option>
+<option value="12:15">12:15pm</option>
+<option value="12:30">12:30pm</option>
+<option value="12:45">12:45pm</option>
+<option value="13:00">1:00pm</option>
+<option value="13:15">1:15pm</option>
+<option value="13:30">1:30pm</option>
+<option value="13:45">1:45pm</option>
+<option value="14:00">2:00pm</option>
+<option value="14:15">2:15pm</option>
+<option value="14:30">2:30pm</option>
+<option value="14:45">2:45pm</option>
+<option value="15:00">3:00pm</option>
+<option value="15:15">3:15pm</option>
+<option value="15:30">3:30pm</option>
+<option value="15:45">3:45pm</option>
+<option value="16:00">4:00pm</option>
+<option value="16:15">4:15pm</option>
+<option value="16:30">4:30pm</option>
+<option value="16:45">4:45pm</option>
+<option value="17:00">5:00pm</option>
+<option value="17:15">5:15pm</option>
+<option value="17:30">5:30pm</option>
+<option value="17:45">5:45pm</option>
+<option value="18:00">6:00pm</option>
+<option value="18:15">6:15pm</option>
+<option value="18:30">6:30pm</option>
+<option value="18:45">6:45pm</option></select></td>
+        <td><select id="finish-0" class="time-select"><option value="">--</option>
+<option value="07:00">7:00am</option>
+<option value="07:15">7:15am</option>
+<option value="07:30">7:30am</option>
+<option value="07:45">7:45am</option>
+<option value="08:00">8:00am</option>
+<option value="08:15">8:15am</option>
+<option value="08:30">8:30am</option>
+<option value="08:45">8:45am</option>
+<option value="09:00">9:00am</option>
+<option value="09:15">9:15am</option>
+<option value="09:30">9:30am</option>
+<option value="09:45">9:45am</option>
+<option value="10:00">10:00am</option>
+<option value="10:15">10:15am</option>
+<option value="10:30">10:30am</option>
+<option value="10:45">10:45am</option>
+<option value="11:00">11:00am</option>
+<option value="11:15">11:15am</option>
+<option value="11:30">11:30am</option>
+<option value="11:45">11:45am</option>
+<option value="12:00">12:00pm</option>
+<option value="12:15">12:15pm</option>
+<option value="12:30">12:30pm</option>
+<option value="12:45">12:45pm</option>
+<option value="13:00">1:00pm</option>
+<option value="13:15">1:15pm</option>
+<option value="13:30">1:30pm</option>
+<option value="13:45">1:45pm</option>
+<option value="14:00">2:00pm</option>
+<option value="14:15">2:15pm</option>
+<option value="14:30">2:30pm</option>
+<option value="14:45">2:45pm</option>
+<option value="15:00">3:00pm</option>
+<option value="15:15">3:15pm</option>
+<option value="15:30">3:30pm</option>
+<option value="15:45">3:45pm</option>
+<option value="16:00">4:00pm</option>
+<option value="16:15">4:15pm</option>
+<option value="16:30">4:30pm</option>
+<option value="16:45">4:45pm</option>
+<option value="17:00">5:00pm</option>
+<option value="17:15">5:15pm</option>
+<option value="17:30">5:30pm</option>
+<option value="17:45">5:45pm</option>
+<option value="18:00">6:00pm</option>
+<option value="18:15">6:15pm</option>
+<option value="18:30">6:30pm</option>
+<option value="18:45">6:45pm</option></select></td>
+        <td id="hrs-0">0.00</td>
+        <td><input id="small-0" type="number" min="0" step="1" inputmode="numeric" placeholder="0"></td>
+        <td><input id="big-0" type="number" min="0" step="1" inputmode="numeric" placeholder="0"></td>
+        <td><button type="button" class="row-reset" data-row="0">↺</button></td>
+      </tr>
+    
+      <tr>
+        <td class="day">Sun</td>
+        <td><select id="start-1" class="time-select"><option value="">--</option>
+<option value="07:00">7:00am</option>
+<option value="07:15">7:15am</option>
+<option value="07:30">7:30am</option>
+<option value="07:45">7:45am</option>
+<option value="08:00">8:00am</option>
+<option value="08:15">8:15am</option>
+<option value="08:30">8:30am</option>
+<option value="08:45">8:45am</option>
+<option value="09:00">9:00am</option>
+<option value="09:15">9:15am</option>
+<option value="09:30">9:30am</option>
+<option value="09:45">9:45am</option>
+<option value="10:00">10:00am</option>
+<option value="10:15">10:15am</option>
+<option value="10:30">10:30am</option>
+<option value="10:45">10:45am</option>
+<option value="11:00">11:00am</option>
+<option value="11:15">11:15am</option>
+<option value="11:30">11:30am</option>
+<option value="11:45">11:45am</option>
+<option value="12:00">12:00pm</option>
+<option value="12:15">12:15pm</option>
+<option value="12:30">12:30pm</option>
+<option value="12:45">12:45pm</option>
+<option value="13:00">1:00pm</option>
+<option value="13:15">1:15pm</option>
+<option value="13:30">1:30pm</option>
+<option value="13:45">1:45pm</option>
+<option value="14:00">2:00pm</option>
+<option value="14:15">2:15pm</option>
+<option value="14:30">2:30pm</option>
+<option value="14:45">2:45pm</option>
+<option value="15:00">3:00pm</option>
+<option value="15:15">3:15pm</option>
+<option value="15:30">3:30pm</option>
+<option value="15:45">3:45pm</option>
+<option value="16:00">4:00pm</option>
+<option value="16:15">4:15pm</option>
+<option value="16:30">4:30pm</option>
+<option value="16:45">4:45pm</option>
+<option value="17:00">5:00pm</option>
+<option value="17:15">5:15pm</option>
+<option value="17:30">5:30pm</option>
+<option value="17:45">5:45pm</option>
+<option value="18:00">6:00pm</option>
+<option value="18:15">6:15pm</option>
+<option value="18:30">6:30pm</option>
+<option value="18:45">6:45pm</option></select></td>
+        <td><select id="finish-1" class="time-select"><option value="">--</option>
+<option value="07:00">7:00am</option>
+<option value="07:15">7:15am</option>
+<option value="07:30">7:30am</option>
+<option value="07:45">7:45am</option>
+<option value="08:00">8:00am</option>
+<option value="08:15">8:15am</option>
+<option value="08:30">8:30am</option>
+<option value="08:45">8:45am</option>
+<option value="09:00">9:00am</option>
+<option value="09:15">9:15am</option>
+<option value="09:30">9:30am</option>
+<option value="09:45">9:45am</option>
+<option value="10:00">10:00am</option>
+<option value="10:15">10:15am</option>
+<option value="10:30">10:30am</option>
+<option value="10:45">10:45am</option>
+<option value="11:00">11:00am</option>
+<option value="11:15">11:15am</option>
+<option value="11:30">11:30am</option>
+<option value="11:45">11:45am</option>
+<option value="12:00">12:00pm</option>
+<option value="12:15">12:15pm</option>
+<option value="12:30">12:30pm</option>
+<option value="12:45">12:45pm</option>
+<option value="13:00">1:00pm</option>
+<option value="13:15">1:15pm</option>
+<option value="13:30">1:30pm</option>
+<option value="13:45">1:45pm</option>
+<option value="14:00">2:00pm</option>
+<option value="14:15">2:15pm</option>
+<option value="14:30">2:30pm</option>
+<option value="14:45">2:45pm</option>
+<option value="15:00">3:00pm</option>
+<option value="15:15">3:15pm</option>
+<option value="15:30">3:30pm</option>
+<option value="15:45">3:45pm</option>
+<option value="16:00">4:00pm</option>
+<option value="16:15">4:15pm</option>
+<option value="16:30">4:30pm</option>
+<option value="16:45">4:45pm</option>
+<option value="17:00">5:00pm</option>
+<option value="17:15">5:15pm</option>
+<option value="17:30">5:30pm</option>
+<option value="17:45">5:45pm</option>
+<option value="18:00">6:00pm</option>
+<option value="18:15">6:15pm</option>
+<option value="18:30">6:30pm</option>
+<option value="18:45">6:45pm</option></select></td>
+        <td id="hrs-1">0.00</td>
+        <td><input id="small-1" type="number" min="0" step="1" inputmode="numeric" placeholder="0"></td>
+        <td><input id="big-1" type="number" min="0" step="1" inputmode="numeric" placeholder="0"></td>
+        <td><button type="button" class="row-reset" data-row="1">↺</button></td>
+      </tr>
+    
+      <tr>
+        <td class="day">Mon</td>
+        <td><select id="start-2" class="time-select"><option value="">--</option>
+<option value="07:00">7:00am</option>
+<option value="07:15">7:15am</option>
+<option value="07:30">7:30am</option>
+<option value="07:45">7:45am</option>
+<option value="08:00">8:00am</option>
+<option value="08:15">8:15am</option>
+<option value="08:30">8:30am</option>
+<option value="08:45">8:45am</option>
+<option value="09:00">9:00am</option>
+<option value="09:15">9:15am</option>
+<option value="09:30">9:30am</option>
+<option value="09:45">9:45am</option>
+<option value="10:00">10:00am</option>
+<option value="10:15">10:15am</option>
+<option value="10:30">10:30am</option>
+<option value="10:45">10:45am</option>
+<option value="11:00">11:00am</option>
+<option value="11:15">11:15am</option>
+<option value="11:30">11:30am</option>
+<option value="11:45">11:45am</option>
+<option value="12:00">12:00pm</option>
+<option value="12:15">12:15pm</option>
+<option value="12:30">12:30pm</option>
+<option value="12:45">12:45pm</option>
+<option value="13:00">1:00pm</option>
+<option value="13:15">1:15pm</option>
+<option value="13:30">1:30pm</option>
+<option value="13:45">1:45pm</option>
+<option value="14:00">2:00pm</option>
+<option value="14:15">2:15pm</option>
+<option value="14:30">2:30pm</option>
+<option value="14:45">2:45pm</option>
+<option value="15:00">3:00pm</option>
+<option value="15:15">3:15pm</option>
+<option value="15:30">3:30pm</option>
+<option value="15:45">3:45pm</option>
+<option value="16:00">4:00pm</option>
+<option value="16:15">4:15pm</option>
+<option value="16:30">4:30pm</option>
+<option value="16:45">4:45pm</option>
+<option value="17:00">5:00pm</option>
+<option value="17:15">5:15pm</option>
+<option value="17:30">5:30pm</option>
+<option value="17:45">5:45pm</option>
+<option value="18:00">6:00pm</option>
+<option value="18:15">6:15pm</option>
+<option value="18:30">6:30pm</option>
+<option value="18:45">6:45pm</option></select></td>
+        <td><select id="finish-2" class="time-select"><option value="">--</option>
+<option value="07:00">7:00am</option>
+<option value="07:15">7:15am</option>
+<option value="07:30">7:30am</option>
+<option value="07:45">7:45am</option>
+<option value="08:00">8:00am</option>
+<option value="08:15">8:15am</option>
+<option value="08:30">8:30am</option>
+<option value="08:45">8:45am</option>
+<option value="09:00">9:00am</option>
+<option value="09:15">9:15am</option>
+<option value="09:30">9:30am</option>
+<option value="09:45">9:45am</option>
+<option value="10:00">10:00am</option>
+<option value="10:15">10:15am</option>
+<option value="10:30">10:30am</option>
+<option value="10:45">10:45am</option>
+<option value="11:00">11:00am</option>
+<option value="11:15">11:15am</option>
+<option value="11:30">11:30am</option>
+<option value="11:45">11:45am</option>
+<option value="12:00">12:00pm</option>
+<option value="12:15">12:15pm</option>
+<option value="12:30">12:30pm</option>
+<option value="12:45">12:45pm</option>
+<option value="13:00">1:00pm</option>
+<option value="13:15">1:15pm</option>
+<option value="13:30">1:30pm</option>
+<option value="13:45">1:45pm</option>
+<option value="14:00">2:00pm</option>
+<option value="14:15">2:15pm</option>
+<option value="14:30">2:30pm</option>
+<option value="14:45">2:45pm</option>
+<option value="15:00">3:00pm</option>
+<option value="15:15">3:15pm</option>
+<option value="15:30">3:30pm</option>
+<option value="15:45">3:45pm</option>
+<option value="16:00">4:00pm</option>
+<option value="16:15">4:15pm</option>
+<option value="16:30">4:30pm</option>
+<option value="16:45">4:45pm</option>
+<option value="17:00">5:00pm</option>
+<option value="17:15">5:15pm</option>
+<option value="17:30">5:30pm</option>
+<option value="17:45">5:45pm</option>
+<option value="18:00">6:00pm</option>
+<option value="18:15">6:15pm</option>
+<option value="18:30">6:30pm</option>
+<option value="18:45">6:45pm</option></select></td>
+        <td id="hrs-2">0.00</td>
+        <td><input id="small-2" type="number" min="0" step="1" inputmode="numeric" placeholder="0"></td>
+        <td><input id="big-2" type="number" min="0" step="1" inputmode="numeric" placeholder="0"></td>
+        <td><button type="button" class="row-reset" data-row="2">↺</button></td>
+      </tr>
+    
+      <tr>
+        <td class="day">Tue</td>
+        <td><select id="start-3" class="time-select"><option value="">--</option>
+<option value="07:00">7:00am</option>
+<option value="07:15">7:15am</option>
+<option value="07:30">7:30am</option>
+<option value="07:45">7:45am</option>
+<option value="08:00">8:00am</option>
+<option value="08:15">8:15am</option>
+<option value="08:30">8:30am</option>
+<option value="08:45">8:45am</option>
+<option value="09:00">9:00am</option>
+<option value="09:15">9:15am</option>
+<option value="09:30">9:30am</option>
+<option value="09:45">9:45am</option>
+<option value="10:00">10:00am</option>
+<option value="10:15">10:15am</option>
+<option value="10:30">10:30am</option>
+<option value="10:45">10:45am</option>
+<option value="11:00">11:00am</option>
+<option value="11:15">11:15am</option>
+<option value="11:30">11:30am</option>
+<option value="11:45">11:45am</option>
+<option value="12:00">12:00pm</option>
+<option value="12:15">12:15pm</option>
+<option value="12:30">12:30pm</option>
+<option value="12:45">12:45pm</option>
+<option value="13:00">1:00pm</option>
+<option value="13:15">1:15pm</option>
+<option value="13:30">1:30pm</option>
+<option value="13:45">1:45pm</option>
+<option value="14:00">2:00pm</option>
+<option value="14:15">2:15pm</option>
+<option value="14:30">2:30pm</option>
+<option value="14:45">2:45pm</option>
+<option value="15:00">3:00pm</option>
+<option value="15:15">3:15pm</option>
+<option value="15:30">3:30pm</option>
+<option value="15:45">3:45pm</option>
+<option value="16:00">4:00pm</option>
+<option value="16:15">4:15pm</option>
+<option value="16:30">4:30pm</option>
+<option value="16:45">4:45pm</option>
+<option value="17:00">5:00pm</option>
+<option value="17:15">5:15pm</option>
+<option value="17:30">5:30pm</option>
+<option value="17:45">5:45pm</option>
+<option value="18:00">6:00pm</option>
+<option value="18:15">6:15pm</option>
+<option value="18:30">6:30pm</option>
+<option value="18:45">6:45pm</option></select></td>
+        <td><select id="finish-3" class="time-select"><option value="">--</option>
+<option value="07:00">7:00am</option>
+<option value="07:15">7:15am</option>
+<option value="07:30">7:30am</option>
+<option value="07:45">7:45am</option>
+<option value="08:00">8:00am</option>
+<option value="08:15">8:15am</option>
+<option value="08:30">8:30am</option>
+<option value="08:45">8:45am</option>
+<option value="09:00">9:00am</option>
+<option value="09:15">9:15am</option>
+<option value="09:30">9:30am</option>
+<option value="09:45">9:45am</option>
+<option value="10:00">10:00am</option>
+<option value="10:15">10:15am</option>
+<option value="10:30">10:30am</option>
+<option value="10:45">10:45am</option>
+<option value="11:00">11:00am</option>
+<option value="11:15">11:15am</option>
+<option value="11:30">11:30am</option>
+<option value="11:45">11:45am</option>
+<option value="12:00">12:00pm</option>
+<option value="12:15">12:15pm</option>
+<option value="12:30">12:30pm</option>
+<option value="12:45">12:45pm</option>
+<option value="13:00">1:00pm</option>
+<option value="13:15">1:15pm</option>
+<option value="13:30">1:30pm</option>
+<option value="13:45">1:45pm</option>
+<option value="14:00">2:00pm</option>
+<option value="14:15">2:15pm</option>
+<option value="14:30">2:30pm</option>
+<option value="14:45">2:45pm</option>
+<option value="15:00">3:00pm</option>
+<option value="15:15">3:15pm</option>
+<option value="15:30">3:30pm</option>
+<option value="15:45">3:45pm</option>
+<option value="16:00">4:00pm</option>
+<option value="16:15">4:15pm</option>
+<option value="16:30">4:30pm</option>
+<option value="16:45">4:45pm</option>
+<option value="17:00">5:00pm</option>
+<option value="17:15">5:15pm</option>
+<option value="17:30">5:30pm</option>
+<option value="17:45">5:45pm</option>
+<option value="18:00">6:00pm</option>
+<option value="18:15">6:15pm</option>
+<option value="18:30">6:30pm</option>
+<option value="18:45">6:45pm</option></select></td>
+        <td id="hrs-3">0.00</td>
+        <td><input id="small-3" type="number" min="0" step="1" inputmode="numeric" placeholder="0"></td>
+        <td><input id="big-3" type="number" min="0" step="1" inputmode="numeric" placeholder="0"></td>
+        <td><button type="button" class="row-reset" data-row="3">↺</button></td>
+      </tr>
+    
+      <tr>
+        <td class="day">Wed</td>
+        <td><select id="start-4" class="time-select"><option value="">--</option>
+<option value="07:00">7:00am</option>
+<option value="07:15">7:15am</option>
+<option value="07:30">7:30am</option>
+<option value="07:45">7:45am</option>
+<option value="08:00">8:00am</option>
+<option value="08:15">8:15am</option>
+<option value="08:30">8:30am</option>
+<option value="08:45">8:45am</option>
+<option value="09:00">9:00am</option>
+<option value="09:15">9:15am</option>
+<option value="09:30">9:30am</option>
+<option value="09:45">9:45am</option>
+<option value="10:00">10:00am</option>
+<option value="10:15">10:15am</option>
+<option value="10:30">10:30am</option>
+<option value="10:45">10:45am</option>
+<option value="11:00">11:00am</option>
+<option value="11:15">11:15am</option>
+<option value="11:30">11:30am</option>
+<option value="11:45">11:45am</option>
+<option value="12:00">12:00pm</option>
+<option value="12:15">12:15pm</option>
+<option value="12:30">12:30pm</option>
+<option value="12:45">12:45pm</option>
+<option value="13:00">1:00pm</option>
+<option value="13:15">1:15pm</option>
+<option value="13:30">1:30pm</option>
+<option value="13:45">1:45pm</option>
+<option value="14:00">2:00pm</option>
+<option value="14:15">2:15pm</option>
+<option value="14:30">2:30pm</option>
+<option value="14:45">2:45pm</option>
+<option value="15:00">3:00pm</option>
+<option value="15:15">3:15pm</option>
+<option value="15:30">3:30pm</option>
+<option value="15:45">3:45pm</option>
+<option value="16:00">4:00pm</option>
+<option value="16:15">4:15pm</option>
+<option value="16:30">4:30pm</option>
+<option value="16:45">4:45pm</option>
+<option value="17:00">5:00pm</option>
+<option value="17:15">5:15pm</option>
+<option value="17:30">5:30pm</option>
+<option value="17:45">5:45pm</option>
+<option value="18:00">6:00pm</option>
+<option value="18:15">6:15pm</option>
+<option value="18:30">6:30pm</option>
+<option value="18:45">6:45pm</option></select></td>
+        <td><select id="finish-4" class="time-select"><option value="">--</option>
+<option value="07:00">7:00am</option>
+<option value="07:15">7:15am</option>
+<option value="07:30">7:30am</option>
+<option value="07:45">7:45am</option>
+<option value="08:00">8:00am</option>
+<option value="08:15">8:15am</option>
+<option value="08:30">8:30am</option>
+<option value="08:45">8:45am</option>
+<option value="09:00">9:00am</option>
+<option value="09:15">9:15am</option>
+<option value="09:30">9:30am</option>
+<option value="09:45">9:45am</option>
+<option value="10:00">10:00am</option>
+<option value="10:15">10:15am</option>
+<option value="10:30">10:30am</option>
+<option value="10:45">10:45am</option>
+<option value="11:00">11:00am</option>
+<option value="11:15">11:15am</option>
+<option value="11:30">11:30am</option>
+<option value="11:45">11:45am</option>
+<option value="12:00">12:00pm</option>
+<option value="12:15">12:15pm</option>
+<option value="12:30">12:30pm</option>
+<option value="12:45">12:45pm</option>
+<option value="13:00">1:00pm</option>
+<option value="13:15">1:15pm</option>
+<option value="13:30">1:30pm</option>
+<option value="13:45">1:45pm</option>
+<option value="14:00">2:00pm</option>
+<option value="14:15">2:15pm</option>
+<option value="14:30">2:30pm</option>
+<option value="14:45">2:45pm</option>
+<option value="15:00">3:00pm</option>
+<option value="15:15">3:15pm</option>
+<option value="15:30">3:30pm</option>
+<option value="15:45">3:45pm</option>
+<option value="16:00">4:00pm</option>
+<option value="16:15">4:15pm</option>
+<option value="16:30">4:30pm</option>
+<option value="16:45">4:45pm</option>
+<option value="17:00">5:00pm</option>
+<option value="17:15">5:15pm</option>
+<option value="17:30">5:30pm</option>
+<option value="17:45">5:45pm</option>
+<option value="18:00">6:00pm</option>
+<option value="18:15">6:15pm</option>
+<option value="18:30">6:30pm</option>
+<option value="18:45">6:45pm</option></select></td>
+        <td id="hrs-4">0.00</td>
+        <td><input id="small-4" type="number" min="0" step="1" inputmode="numeric" placeholder="0"></td>
+        <td><input id="big-4" type="number" min="0" step="1" inputmode="numeric" placeholder="0"></td>
+        <td><button type="button" class="row-reset" data-row="4">↺</button></td>
+      </tr>
+    
+      <tr>
+        <td class="day">Thu</td>
+        <td><select id="start-5" class="time-select"><option value="">--</option>
+<option value="07:00">7:00am</option>
+<option value="07:15">7:15am</option>
+<option value="07:30">7:30am</option>
+<option value="07:45">7:45am</option>
+<option value="08:00">8:00am</option>
+<option value="08:15">8:15am</option>
+<option value="08:30">8:30am</option>
+<option value="08:45">8:45am</option>
+<option value="09:00">9:00am</option>
+<option value="09:15">9:15am</option>
+<option value="09:30">9:30am</option>
+<option value="09:45">9:45am</option>
+<option value="10:00">10:00am</option>
+<option value="10:15">10:15am</option>
+<option value="10:30">10:30am</option>
+<option value="10:45">10:45am</option>
+<option value="11:00">11:00am</option>
+<option value="11:15">11:15am</option>
+<option value="11:30">11:30am</option>
+<option value="11:45">11:45am</option>
+<option value="12:00">12:00pm</option>
+<option value="12:15">12:15pm</option>
+<option value="12:30">12:30pm</option>
+<option value="12:45">12:45pm</option>
+<option value="13:00">1:00pm</option>
+<option value="13:15">1:15pm</option>
+<option value="13:30">1:30pm</option>
+<option value="13:45">1:45pm</option>
+<option value="14:00">2:00pm</option>
+<option value="14:15">2:15pm</option>
+<option value="14:30">2:30pm</option>
+<option value="14:45">2:45pm</option>
+<option value="15:00">3:00pm</option>
+<option value="15:15">3:15pm</option>
+<option value="15:30">3:30pm</option>
+<option value="15:45">3:45pm</option>
+<option value="16:00">4:00pm</option>
+<option value="16:15">4:15pm</option>
+<option value="16:30">4:30pm</option>
+<option value="16:45">4:45pm</option>
+<option value="17:00">5:00pm</option>
+<option value="17:15">5:15pm</option>
+<option value="17:30">5:30pm</option>
+<option value="17:45">5:45pm</option>
+<option value="18:00">6:00pm</option>
+<option value="18:15">6:15pm</option>
+<option value="18:30">6:30pm</option>
+<option value="18:45">6:45pm</option></select></td>
+        <td><select id="finish-5" class="time-select"><option value="">--</option>
+<option value="07:00">7:00am</option>
+<option value="07:15">7:15am</option>
+<option value="07:30">7:30am</option>
+<option value="07:45">7:45am</option>
+<option value="08:00">8:00am</option>
+<option value="08:15">8:15am</option>
+<option value="08:30">8:30am</option>
+<option value="08:45">8:45am</option>
+<option value="09:00">9:00am</option>
+<option value="09:15">9:15am</option>
+<option value="09:30">9:30am</option>
+<option value="09:45">9:45am</option>
+<option value="10:00">10:00am</option>
+<option value="10:15">10:15am</option>
+<option value="10:30">10:30am</option>
+<option value="10:45">10:45am</option>
+<option value="11:00">11:00am</option>
+<option value="11:15">11:15am</option>
+<option value="11:30">11:30am</option>
+<option value="11:45">11:45am</option>
+<option value="12:00">12:00pm</option>
+<option value="12:15">12:15pm</option>
+<option value="12:30">12:30pm</option>
+<option value="12:45">12:45pm</option>
+<option value="13:00">1:00pm</option>
+<option value="13:15">1:15pm</option>
+<option value="13:30">1:30pm</option>
+<option value="13:45">1:45pm</option>
+<option value="14:00">2:00pm</option>
+<option value="14:15">2:15pm</option>
+<option value="14:30">2:30pm</option>
+<option value="14:45">2:45pm</option>
+<option value="15:00">3:00pm</option>
+<option value="15:15">3:15pm</option>
+<option value="15:30">3:30pm</option>
+<option value="15:45">3:45pm</option>
+<option value="16:00">4:00pm</option>
+<option value="16:15">4:15pm</option>
+<option value="16:30">4:30pm</option>
+<option value="16:45">4:45pm</option>
+<option value="17:00">5:00pm</option>
+<option value="17:15">5:15pm</option>
+<option value="17:30">5:30pm</option>
+<option value="17:45">5:45pm</option>
+<option value="18:00">6:00pm</option>
+<option value="18:15">6:15pm</option>
+<option value="18:30">6:30pm</option>
+<option value="18:45">6:45pm</option></select></td>
+        <td id="hrs-5">0.00</td>
+        <td><input id="small-5" type="number" min="0" step="1" inputmode="numeric" placeholder="0"></td>
+        <td><input id="big-5" type="number" min="0" step="1" inputmode="numeric" placeholder="0"></td>
+        <td><button type="button" class="row-reset" data-row="5">↺</button></td>
+      </tr>
+    
+      <tr>
+        <td class="day">Fri</td>
+        <td><select id="start-6" class="time-select"><option value="">--</option>
+<option value="07:00">7:00am</option>
+<option value="07:15">7:15am</option>
+<option value="07:30">7:30am</option>
+<option value="07:45">7:45am</option>
+<option value="08:00">8:00am</option>
+<option value="08:15">8:15am</option>
+<option value="08:30">8:30am</option>
+<option value="08:45">8:45am</option>
+<option value="09:00">9:00am</option>
+<option value="09:15">9:15am</option>
+<option value="09:30">9:30am</option>
+<option value="09:45">9:45am</option>
+<option value="10:00">10:00am</option>
+<option value="10:15">10:15am</option>
+<option value="10:30">10:30am</option>
+<option value="10:45">10:45am</option>
+<option value="11:00">11:00am</option>
+<option value="11:15">11:15am</option>
+<option value="11:30">11:30am</option>
+<option value="11:45">11:45am</option>
+<option value="12:00">12:00pm</option>
+<option value="12:15">12:15pm</option>
+<option value="12:30">12:30pm</option>
+<option value="12:45">12:45pm</option>
+<option value="13:00">1:00pm</option>
+<option value="13:15">1:15pm</option>
+<option value="13:30">1:30pm</option>
+<option value="13:45">1:45pm</option>
+<option value="14:00">2:00pm</option>
+<option value="14:15">2:15pm</option>
+<option value="14:30">2:30pm</option>
+<option value="14:45">2:45pm</option>
+<option value="15:00">3:00pm</option>
+<option value="15:15">3:15pm</option>
+<option value="15:30">3:30pm</option>
+<option value="15:45">3:45pm</option>
+<option value="16:00">4:00pm</option>
+<option value="16:15">4:15pm</option>
+<option value="16:30">4:30pm</option>
+<option value="16:45">4:45pm</option>
+<option value="17:00">5:00pm</option>
+<option value="17:15">5:15pm</option>
+<option value="17:30">5:30pm</option>
+<option value="17:45">5:45pm</option>
+<option value="18:00">6:00pm</option>
+<option value="18:15">6:15pm</option>
+<option value="18:30">6:30pm</option>
+<option value="18:45">6:45pm</option></select></td>
+        <td><select id="finish-6" class="time-select"><option value="">--</option>
+<option value="07:00">7:00am</option>
+<option value="07:15">7:15am</option>
+<option value="07:30">7:30am</option>
+<option value="07:45">7:45am</option>
+<option value="08:00">8:00am</option>
+<option value="08:15">8:15am</option>
+<option value="08:30">8:30am</option>
+<option value="08:45">8:45am</option>
+<option value="09:00">9:00am</option>
+<option value="09:15">9:15am</option>
+<option value="09:30">9:30am</option>
+<option value="09:45">9:45am</option>
+<option value="10:00">10:00am</option>
+<option value="10:15">10:15am</option>
+<option value="10:30">10:30am</option>
+<option value="10:45">10:45am</option>
+<option value="11:00">11:00am</option>
+<option value="11:15">11:15am</option>
+<option value="11:30">11:30am</option>
+<option value="11:45">11:45am</option>
+<option value="12:00">12:00pm</option>
+<option value="12:15">12:15pm</option>
+<option value="12:30">12:30pm</option>
+<option value="12:45">12:45pm</option>
+<option value="13:00">1:00pm</option>
+<option value="13:15">1:15pm</option>
+<option value="13:30">1:30pm</option>
+<option value="13:45">1:45pm</option>
+<option value="14:00">2:00pm</option>
+<option value="14:15">2:15pm</option>
+<option value="14:30">2:30pm</option>
+<option value="14:45">2:45pm</option>
+<option value="15:00">3:00pm</option>
+<option value="15:15">3:15pm</option>
+<option value="15:30">3:30pm</option>
+<option value="15:45">3:45pm</option>
+<option value="16:00">4:00pm</option>
+<option value="16:15">4:15pm</option>
+<option value="16:30">4:30pm</option>
+<option value="16:45">4:45pm</option>
+<option value="17:00">5:00pm</option>
+<option value="17:15">5:15pm</option>
+<option value="17:30">5:30pm</option>
+<option value="17:45">5:45pm</option>
+<option value="18:00">6:00pm</option>
+<option value="18:15">6:15pm</option>
+<option value="18:30">6:30pm</option>
+<option value="18:45">6:45pm</option></select></td>
+        <td id="hrs-6">0.00</td>
+        <td><input id="small-6" type="number" min="0" step="1" inputmode="numeric" placeholder="0"></td>
+        <td><input id="big-6" type="number" min="0" step="1" inputmode="numeric" placeholder="0"></td>
+        <td><button type="button" class="row-reset" data-row="6">↺</button></td>
+      </tr>
+    
+      </tbody>
+    </table>
+
+    <div class="footer">
+      <div class="totals">
+        <div class="box"><div class="label">Hours</div><div class="value" id="total-hours">0.00</div></div>
+        <div class="box"><div class="label">Small</div><div class="value" id="total-small">0</div></div>
+        <div class="box"><div class="label">Big</div><div class="value" id="total-big">0</div></div>
+      </div>
+      <div class="actions">
+        <button type="button" class="calc-btn" id="calc-btn">Calculate</button>
+        <button type="button" class="email-btn" id="email-btn">Email PDF</button>
+        <button type="button" class="week-reset" id="week-reset">Reset Week</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="note">This version does not use cloud save. It emails a PDF copy of the current timesheet. Reset PIN is 1621.</div>
+</div>
+
+<script>
+(function() {
+  const STORAGE_KEY = "ane_yulviane_timesheet_email_v1";
+  const PIN = "1621";
+  const ROWS = 7;
+  const EMAIL_TO = "info@camelotcottages.com.au";
+
+  function byId(id) {
+    return document.getElementById(id);
+  }
+
+  function setStatus(text) {
+    byId("status-pill").textContent = "Status: " + text;
+  }
+
+  function mins(value) {
+    if (!value) return null;
+    const bits = value.split(":");
+    if (bits.length !== 2) return null;
+    return (parseInt(bits[0], 10) * 60) + parseInt(bits[1], 10);
+  }
+
+  function calcHours(start, finish) {
+    const s = mins(start);
+    const f = mins(finish);
+    if (s === null || f === null) return 0;
+    if (f < s) return 0;
+    return (f - s) / 60;
+  }
+
+  function getRow(i) {
+    return {
+      day: document.querySelectorAll("tbody tr")[i].querySelector(".day").textContent,
+      start: byId("start-" + i).value,
+      finish: byId("finish-" + i).value,
+      small: byId("small-" + i).value || "",
+      big: byId("big-" + i).value || ""
+    };
+  }
+
+  function recalc() {
+    let totalHours = 0;
+    let totalSmall = 0;
+    let totalBig = 0;
+
+    for (let i = 0; i < ROWS; i++) {
+      const row = getRow(i);
+      const hrs = calcHours(row.start, row.finish);
+      byId("hrs-" + i).textContent = hrs.toFixed(2);
+      totalHours += hrs;
+      totalSmall += parseInt(row.small || "0", 10) || 0;
+      totalBig += parseInt(row.big || "0", 10) || 0;
+    }
+
+    byId("total-hours").textContent = totalHours.toFixed(2);
+    byId("total-small").textContent = String(totalSmall);
+    byId("total-big").textContent = String(totalBig);
+    save();
+  }
+
+  function save() {
+    const data = [];
+    for (let i = 0; i < ROWS; i++) data.push(getRow(i));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  }
+
+  function load() {
+    try {
+      const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+      if (!Array.isArray(data)) return;
+      for (let i = 0; i < ROWS; i++) {
+        const row = data[i] || {};
+        byId("start-" + i).value = row.start || "";
+        byId("finish-" + i).value = row.finish || "";
+        byId("small-" + i).value = row.small || "";
+        byId("big-" + i).value = row.big || "";
+      }
+    } catch (e) {}
+  }
+
+  function resetRow(i) {
+    byId("start-" + i).value = "";
+    byId("finish-" + i).value = "";
+    byId("small-" + i).value = "";
+    byId("big-" + i).value = "";
+    recalc();
+  }
+
+  function resetWeek() {
+    const entered = window.prompt("Enter PIN to reset the week:");
+    if (entered === null) return;
+    if (entered !== PIN) {
+      window.alert("Incorrect PIN.");
+      return;
+    }
+    for (let i = 0; i < ROWS; i++) resetRow(i);
+    recalc();
+  }
+
+  function currentDateLabel() {
+    return new Date().toLocaleDateString("en-AU", {
+      timeZone: "Australia/Brisbane",
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric"
+    });
+  }
+
+  function buildPdf() {
+    const jsPDF = window.jspdf.jsPDF;
+    const doc = new jsPDF({ unit: "pt", format: "a4" });
+    const margin = 40;
+    let y = 50;
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(18);
+    doc.text("Ane Yulviane Timesheet", margin, y);
+
+    y += 22;
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    doc.text("Generated: " + currentDateLabel(), margin, y);
+
+    y += 24;
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(10);
+
+    const colX = [margin, 90, 170, 250, 310, 390];
+    doc.text("Day", colX[0], y);
+    doc.text("Start", colX[1], y);
+    doc.text("Finish", colX[2], y);
+    doc.text("Hours", colX[3], y);
+    doc.text("Small", colX[4], y);
+    doc.text("Big", colX[5], y);
+
+    y += 8;
+    doc.line(margin, y, 555, y);
+    y += 16;
+    doc.setFont("helvetica", "normal");
+
+    let totalHours = 0;
+    let totalSmall = 0;
+    let totalBig = 0;
+
+    for (let i = 0; i < ROWS; i++) {
+      const row = getRow(i);
+      const hrs = calcHours(row.start, row.finish);
+      totalHours += hrs;
+      totalSmall += parseInt(row.small || "0", 10) || 0;
+      totalBig += parseInt(row.big || "0", 10) || 0;
+
+      doc.text(row.day, colX[0], y);
+      doc.text(row.start || "-", colX[1], y);
+      doc.text(row.finish || "-", colX[2], y);
+      doc.text(hrs.toFixed(2), colX[3], y);
+      doc.text(String(row.small || 0), colX[4], y);
+      doc.text(String(row.big || 0), colX[5], y);
+      y += 20;
+    }
+
+    y += 6;
+    doc.line(margin, y, 555, y);
+    y += 18;
+    doc.setFont("helvetica", "bold");
+    doc.text("Totals", colX[0], y);
+    doc.text(totalHours.toFixed(2), colX[3], y);
+    doc.text(String(totalSmall), colX[4], y);
+    doc.text(String(totalBig), colX[5], y);
+
+    return {
+      filename: "ane-yulviane-timesheet-" + currentDateLabel().replaceAll("/", "-") + ".pdf",
+      dataUri: doc.output("datauristring")
+    };
+  }
+
+  async function emailPdf() {
+    recalc();
+    setStatus("building PDF…");
+    try {
+      const pdf = buildPdf();
+      setStatus("sending email…");
+      const res = await fetch("/.netlify/functions/send-timesheet", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          to: EMAIL_TO,
+          filename: pdf.filename,
+          pdfDataUri: pdf.dataUri,
+          totals: {
+            hours: byId("total-hours").textContent,
+            small: byId("total-small").textContent,
+            big: byId("total-big").textContent
+          }
+        })
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(json.error || "Email failed");
+      setStatus("email sent");
+      window.alert("Timesheet emailed successfully.");
+    } catch (err) {
+      setStatus("email failed");
+      window.alert("Email failed. Check the Netlify function settings.\n\n" + err.message);
+    }
+  }
+
+  for (let i = 0; i < ROWS; i++) {
+    byId("start-" + i).addEventListener("change", recalc);
+    byId("finish-" + i).addEventListener("change", recalc);
+    byId("small-" + i).addEventListener("input", recalc);
+    byId("big-" + i).addEventListener("input", recalc);
+  }
+
+  document.querySelectorAll(".row-reset").forEach(function(btn) {
+    btn.addEventListener("click", function() {
+      resetRow(parseInt(btn.getAttribute("data-row"), 10));
+    });
+  });
+
+  byId("calc-btn").addEventListener("click", recalc);
+  byId("email-btn").addEventListener("click", emailPdf);
+  byId("week-reset").addEventListener("click", resetWeek);
+
+  load();
+  recalc();
+})();
+</script>
+</body>
+</html>
