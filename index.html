@@ -51,7 +51,7 @@ button{padding:10px;border:none;border-radius:6px;margin:4px}
 <p>Total Big: <b id="total-big">0</b></p>
 
 <button class="calc" onclick="recalc()">Calculate</button>
-<button class="email" onclick="alert('Email function unchanged')">Email PDF</button>
+<button class="email" onclick="alert('Email PDF button unchanged in this layout file')">Email PDF</button>
 <button class="reset" onclick="resetWeek()">Reset Week</button>
 
 </div>
@@ -62,70 +62,81 @@ const days=["Sat","Sun","Mon","Tue","Wed","Thu","Fri"]
 const rows=document.getElementById("rows")
 
 function timeOptions(){
-let o='<option value=""></option>'
-for(let h=7;h<=18;h++){
-for(let m of [0,15,30,45]){
-let v=(h.toString().padStart(2,"0")+":"+m.toString().padStart(2,"0"))
-let h12=((h+11)%12)+1
-let ampm=h<12?"am":"pm"
-o+=`<option value="${v}">${h12}:${m.toString().padStart(2,"0")}${ampm}</option>`
-}
-}
-return o
+  let o='<option value=""></option>'
+  for(let h=7;h<=18;h++){
+    for(let m of [0,15,30,45]){
+      let v=(h.toString().padStart(2,"0")+":"+m.toString().padStart(2,"0"))
+      let h12=((h+11)%12)+1
+      let ampm=h<12?"am":"pm"
+      o+=`<option value="${v}">${h12}:${m.toString().padStart(2,"0")}${ampm}</option>`
+    }
+  }
+  return o
 }
 
 for(let i=0;i<7;i++){
-rows.innerHTML+=`
-<tr>
-<td class="day">${days[i]}</td>
-<td class="start"><select id="start-${i}">${timeOptions()}</select></td>
-<td class="finish"><select id="finish-${i}">${timeOptions()}</select></td>
-<td class="hrs" id="hrs-${i}">0.00</td>
-<td class="small"><input id="small-${i}" type="number"></td>
-<td class="big"><input id="big-${i}" type="number"></td>
-</tr>`
+  rows.innerHTML+=`
+  <tr>
+    <td class="day">${days[i]}</td>
+    <td class="start"><select id="start-${i}">${timeOptions()}</select></td>
+    <td class="finish"><select id="finish-${i}">${timeOptions()}</select></td>
+    <td class="hrs" id="hrs-${i}">0.00</td>
+    <td class="small"><input id="small-${i}" type="number"></td>
+    <td class="big"><input id="big-${i}" type="number"></td>
+  </tr>`
 }
 
 function mins(v){
-if(!v)return null
-let p=v.split(":")
-return parseInt(p[0])*60+parseInt(p[1])
+  if(!v) return null
+  let p=v.split(":")
+  return parseInt(p[0],10)*60 + parseInt(p[1],10)
 }
 
 function calcHours(s,f){
-let a=mins(s),b=mins(f)
-if(a==null||b==null||b<a)return 0
-return (b-a)/60
+  let a=mins(s), b=mins(f)
+  if(a==null || b==null || b<a) return 0
+  return (b-a)/60
 }
 
 function recalc(){
-let th=0,ts=0,tb=0
-for(let i=0;i<7;i++){
-let s=document.getElementById("start-"+i).value
-let f=document.getElementById("finish-"+i).value
-let sm=parseInt(document.getElementById("small-"+i).value||0)
-let bg=parseInt(document.getElementById("big-"+i).value||0)
-let h=calcHours(s,f)
-document.getElementById("hrs-"+i).innerText=h.toFixed(2)
-th+=h;ts+=sm;tb+=bg
-}
-document.getElementById("total-hours").innerText=th.toFixed(2)
-document.getElementById("total-small").innerText=ts
-document.getElementById("total-big").innerText=tb
+  let th=0, ts=0, tb=0
+  for(let i=0;i<7;i++){
+    let s=document.getElementById("start-"+i).value
+    let f=document.getElementById("finish-"+i).value
+    let sm=parseInt(document.getElementById("small-"+i).value || 0, 10) || 0
+    let bg=parseInt(document.getElementById("big-"+i).value || 0, 10) || 0
+    let h=calcHours(s,f)
+    document.getElementById("hrs-"+i).innerText=h.toFixed(2)
+    th+=h
+    ts+=sm
+    tb+=bg
+  }
+  document.getElementById("total-hours").innerText=th.toFixed(2)
+  document.getElementById("total-small").innerText=ts
+  document.getElementById("total-big").innerText=tb
 }
 
 function resetWeek(){
-let p=prompt("Enter PIN")
-if(p!==PIN){alert("Incorrect PIN");return}
+  let p=prompt("Enter PIN")
+  if(p!==PIN){alert("Incorrect PIN");return}
+  for(let i=0;i<7;i++){
+    document.getElementById("start-"+i).value=""
+    document.getElementById("finish-"+i).value=""
+    document.getElementById("small-"+i).value=""
+    document.getElementById("big-"+i).value=""
+    document.getElementById("hrs-"+i).innerText="0.00"
+  }
+  recalc()
+}
+
 for(let i=0;i<7;i++){
-document.getElementById("start-"+i).value=""
-document.getElementById("finish-"+i).value=""
-document.getElementById("small-"+i).value=""
-document.getElementById("big-"+i).value=""
-document.getElementById("hrs-"+i).innerText="0.00"
+  document.getElementById("start-"+i).addEventListener("change", recalc)
+  document.getElementById("finish-"+i).addEventListener("change", recalc)
+  document.getElementById("small-"+i).addEventListener("input", recalc)
+  document.getElementById("big-"+i).addEventListener("input", recalc)
 }
+
 recalc()
-}
 </script>
 
 </body>
