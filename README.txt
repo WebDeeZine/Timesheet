@@ -1,20 +1,15 @@
-Ane Yulviane Timesheet - email PDF version
+Ane Yulviane Timesheet - email working version
 
-What this version does
-- No cloud saving
-- Keeps local browser saving only
-- Generates a PDF of the current timesheet
-- Emails the PDF to info@camelotcottages.com.au
+This version includes:
+- no row reset buttons
+- week reset PIN 2307
+- wider Start and Finish columns
+- narrower Small and Big columns
+- automatic totals
+- Email PDF button wired to Netlify Function / Resend
 
-Netlify setup needed
-1. Deploy this site to Netlify from GitHub
-2. In Netlify, go to Site configuration > Environment variables
-3. Add:
-   RESEND_API_KEY = your Resend API key
-   FROM_EMAIL = a verified sender address in Resend
-   Example FROM_EMAIL: Camelot <timesheets@yourdomain.com>
-4. Trigger a redeploy
+Required Netlify environment variables:
+- RESEND_API_KEY
+- FROM_EMAIL
 
-Notes
-- The email button will not work until those two environment variables are added.
-- Reset PIN is 1621.
+Deploy by replacing the files in your GitHub repo and letting Netlify auto-deploy.

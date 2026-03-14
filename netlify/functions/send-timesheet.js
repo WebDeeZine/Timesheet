@@ -23,9 +23,7 @@ export default async (req) => {
     const pdfDataUri = body?.pdfDataUri;
     const totals = body?.totals || {};
 
-    if (!to) {
-      throw new Error("Missing recipient email address");
-    }
+    if (!to) throw new Error("Missing recipient email address");
     if (!pdfDataUri || !pdfDataUri.startsWith("data:application/pdf")) {
       throw new Error("Missing or invalid PDF data");
     }
