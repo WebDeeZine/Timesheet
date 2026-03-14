@@ -7,16 +7,25 @@
 <style>
 body{font-family:Arial;margin:0;background:#f6f3ef}
 .wrap{padding:10px}
-table{width:100%;border-collapse:collapse}
+table{width:100%;border-collapse:collapse;table-layout:fixed}
 th,td{padding:6px;border-bottom:1px solid #ddd;text-align:center;font-size:14px}
 th{background:#eee}
-select,input{width:100%;padding:6px}
+select,input{width:100%;padding:6px;box-sizing:border-box}
+
+.day{width:12%}
+.start{width:26%}
+.finish{width:26%}
+.hrs{width:12%}
+.small{width:12%}
+.big{width:12%}
+
 button{padding:10px;border:none;border-radius:6px;margin:4px}
 .calc{background:#dfeade}
 .email{background:#2d6a4f;color:white}
 .reset{background:#a14b4b;color:white}
 </style>
 </head>
+
 <body>
 
 <div class="wrap">
@@ -25,12 +34,12 @@ button{padding:10px;border:none;border-radius:6px;margin:4px}
 <table>
 <thead>
 <tr>
-<th>Day</th>
-<th>Start</th>
-<th>Finish</th>
-<th>Hrs</th>
-<th>Small</th>
-<th>Big</th>
+<th class="day">Day</th>
+<th class="start">Start</th>
+<th class="finish">Finish</th>
+<th class="hrs">Hrs</th>
+<th class="small">Small</th>
+<th class="big">Big</th>
 </tr>
 </thead>
 
@@ -68,12 +77,12 @@ return o
 for(let i=0;i<7;i++){
 rows.innerHTML+=`
 <tr>
-<td>${days[i]}</td>
-<td><select id="start-${i}">${timeOptions()}</select></td>
-<td><select id="finish-${i}">${timeOptions()}</select></td>
-<td id="hrs-${i}">0.00</td>
-<td><input id="small-${i}" type="number"></td>
-<td><input id="big-${i}" type="number"></td>
+<td class="day">${days[i]}</td>
+<td class="start"><select id="start-${i}">${timeOptions()}</select></td>
+<td class="finish"><select id="finish-${i}">${timeOptions()}</select></td>
+<td class="hrs" id="hrs-${i}">0.00</td>
+<td class="small"><input id="small-${i}" type="number"></td>
+<td class="big"><input id="big-${i}" type="number"></td>
 </tr>`
 }
 
